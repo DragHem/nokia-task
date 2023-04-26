@@ -1,16 +1,22 @@
-import Summary from "./components/summary/Summary.tsx";
-import { Suspense } from "react";
-import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
+import CountryDetails from "./components/CountryDetails.tsx";
+import "./index.css";
+import TotalStatistics from "./components/TotalStatistics.tsx";
+import { SummaryType } from "../types";
+import useSWR from "swr";
+import { fetcher } from "../lib";
 
 function App() {
+  const { data }: { data: SummaryType } = useSWR(
+    "https://api.covid19api.com/summary",
+    fetcher,
+    { suspense: true }
+  );
+
   return (
-    <>
-      <ErrorBoundary fallback={"Error occurred when fetching data."}>
-        <Suspense fallback={<div>loading...</div>}>
-          <Summary />
-        </Suspense>
-      </ErrorBoundary>
-    </>
+    <div className="w-full md:w-3/4 mx-auto p-2">
+      <TotalStatistics {...data.Global} />
+      <CountryDetails countries={data.Countries} />
+    </div>
   );
 }
 

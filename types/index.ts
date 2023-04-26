@@ -1,3 +1,3 @@
-import type { SummaryType, GlobalType, Country } from "./Summary.type";
+import type { SummaryType, GlobalType } from "./Summary.type";
 
-export { SummaryType, GlobalType, Country };
+export { SummaryType, GlobalType };

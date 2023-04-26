@@ -1,16 +1,30 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-function usePagination<T>(data: T[], paginationCount: number) {
+function usePagination<T extends object, K extends keyof T>(
+  data: T[],
+  paginationCount: number,
+  key: K
+) {
   const [page, setPage] = useState(0);
+  const [filterValue, setFilterValue] = useState<string>("");
 
-  const paginationData = [...data].splice(
-    paginationCount * page,
-    paginationCount
+  useEffect(() => {
+    setPage(0);
+  }, [filterValue]);
+
+  const filteredData = useMemo(
+    () =>
+      data.filter((country) =>
+        (country[key] as string)
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
+      ),
+    [filterValue, key, data]
   );
 
   const pagesCount = useMemo(
-    () => Math.ceil(data.length / paginationCount),
-    [data.length, paginationCount]
+    () => Math.ceil(filteredData.length / paginationCount),
+    [paginationCount, filteredData.length]
   );
 
   const setNextPage = () => setPage((prev) => prev + 1);
@@ -21,12 +35,17 @@ function usePagination<T>(data: T[], paginationCount: number) {
 
   return {
     page: page + 1,
-    paginationData,
+    paginationData: [...filteredData].splice(
+      paginationCount * page,
+      paginationCount
+    ),
     pagesCount,
     setNextPage,
     setPrevPage,
     disableNext,
     disablePrev,
+    filterValue,
+    setFilterValue,
   };
 }
 

@@ -1,5 +1,7 @@
 import { GlobalType } from "../../types";
 import { format } from "date-fns";
+import Text from "./Text.tsx";
+import Divider from "./Divider.tsx";
 
 const TotalStatistics = (props: GlobalType) => {
   const {
@@ -15,16 +17,25 @@ const TotalStatistics = (props: GlobalType) => {
   const formattedDate = format(new Date(StatisticsDate), "dd.MM yyyy");
 
   return (
-    <div>
-      <h1>Covid-19 Global Statistics</h1>
-      <h2>{formattedDate}</h2>
-      <p>Total deaths: {TotalDeaths}</p>
-      <p>New confirmed: {NewConfirmed}</p>
-      <p>New deaths: {NewDeaths}</p>
-      <p>New recovered: {NewRecovered}</p>
-      <p>Total deaths: {TotalDeaths}</p>
-      <p>Total confirmed: {TotalConfirmed}</p>
-      <p>Total recovered: {TotalRecovered}</p>
+    <div className="text-center bg-base-100 rounded p-4 w-full">
+      <h1 className="text-2xl font-bold">
+        Covid-19 Global Statistics <br /> {formattedDate}
+      </h1>
+      <div className="flex justify-center no-scrollbar flex-row mt-2 overflow-x-auto">
+        <Text label="New Confirmed" data={NewConfirmed} />
+        <Divider />
+        <Text label="New Deaths" data={NewDeaths} />
+        <Divider />
+        <Text label="New Recovered" data={NewRecovered} />
+        <Divider />
+        <Text label="Total Death" data={TotalDeaths} />
+        <Divider />
+        <Text label="Total Deaths" data={TotalDeaths} />
+        <Divider />
+        <Text label="Total Confirmed" data={TotalConfirmed} />
+        <Divider />
+        <Text label="Total Recovered" data={TotalRecovered} />
+      </div>
     </div>
   );
 };
